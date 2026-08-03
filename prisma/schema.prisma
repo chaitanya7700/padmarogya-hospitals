@@ -1,0 +1,198 @@
+// Prisma schema for Padmarogya Hospitals CMS
+// Database models for admin-editable content
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+enum AdminRole {
+  SUPER_ADMIN
+  CONTENT_MANAGER
+  DEPARTMENT_MANAGER
+}
+
+model AdminUser {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  name      String
+  role      AdminRole @default(CONTENT_MANAGER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model SiteSettings {
+  id              String @id @default("default")
+  hospitalName    String @default("Padmarogya Hospitals")
+  tagline         String @default("सेवा, श्रद्धा, आरोग्य")
+  taglineEnglish  String @default("Service, Devotion, Health")
+  logo            String?
+  colorNavy       String @default("#0a2540")
+  colorGreen      String @default("#2d8f6f")
+  colorLotusPink  String @default("#e8a0bf")
+  fontHeading     String @default("Playfair Display")
+  fontBody        String @default("Poppins")
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
+  ogImage         String?
+  updatedAt       DateTime @updatedAt
+}
+
+model HeroSlide {
+  id          String  @id @default(cuid())
+  title       String
+  subtitle    String
+  description String
+  image       String
+  ctaPrimary  String
+  ctaSecondary String
+  ctaPrimaryHref  String
+  ctaSecondaryHref String
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String
+  icon        String
+  services    String   // JSON array
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  doctors     Doctor[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Doctor {
+  id             String     @id @default(cuid())
+  slug           String     @unique
+  name           String
+  qualification  String
+  specialization String
+  experience     String
+  availability   String
+  photo          String?
+  bio            String?
+  departmentId   String
+  department     Department @relation(fields: [departmentId], references: [id])
+  sortOrder      Int        @default(0)
+  isActive       Boolean    @default(true)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model Service {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Facility {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  image       String?
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Testimonial {
+  id          String  @id @default(cuid())
+  patientName String
+  review      String
+  rating      Int     @default(5)
+  photo       String?
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GalleryItem {
+  id       String @id @default(cuid())
+  title    String
+  image    String
+  category String // infrastructure | doctors | events | medical-camps
+  sortOrder Int   @default(0)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String
+  image       String?
+  author      String
+  publishedAt DateTime @default(now())
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AppointmentEnquiry {
+  id            String   @id @default(cuid())
+  patientName   String
+  email         String
+  phone         String
+  departmentId  String?
+  doctorId      String?
+  preferredDate String
+  preferredTime String
+  message       String?
+  status        String   @default("pending") // pending | confirmed | cancelled
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ContactEnquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  subject   String
+  message   String
+  status    String   @default("new") // new | read | replied
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Notice {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HealthPackage {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  features    String  // JSON array
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
