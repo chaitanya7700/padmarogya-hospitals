@@ -39,6 +39,9 @@ export const metadata: Metadata = {
   title: seoMeta.title,
   description: seoMeta.description,
   keywords: seoMeta.keywords,
+  verification: {
+    google: "odY1V5S4cUbI43bBSgvxnb_bZQGJV70Y0Xz90-sWRII",
+  },
 };
 
 export default function RootLayout({
