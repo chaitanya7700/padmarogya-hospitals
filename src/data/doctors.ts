@@ -15,8 +15,8 @@ export const doctors: Doctor[] = [
   },
   {
     id: "doc-2",
-    slug: "dr-priya-patil",
-    name: "Dr. Priya Patil",
+    slug: "dr-mayur-sase",
+    name: "Dr. Mayur Sase",
     qualification: "MS (Orthopedics)",
     specialization: "Joint Replacement & Sports Medicine",
     experience: "15+ years",
